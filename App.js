@@ -1,11 +1,42 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Button,
+  Switch,
+} from "react-native";
+import UseEffectWithClassComponet from "./screen/useEffect/UseEffectWithClassComponet";
+import UseEffectWithFunctionalComponent from "./screen/useEffect/UseEffectWithFunctionalComponent";
+// import StateWitheClassComponent from "./screen/StateWitheClassComponent";
+// import StateWitheFunctionComponent from "./screen/StateWitheFunctionComponent";
 
 export default function App() {
+  const [isTure, setIsTrue] = useState(true);
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      {/* <StateWitheClassComponent /> */}
+      {/* <StateWitheFunctionComponent /> */}
+      {/* {isTure ? <UseEffectWithClassComponet /> : null}
+      <Button
+        title="toggle"
+        onPress={() => {
+          setIsTrue(!isTure);
+        }}
+      /> */}
+      <UseEffectWithFunctionalComponent />
+
+      <Button
+        title="toggle"
+        onPress={() => {
+          setIsTrue(!isTure);
+        }}
+      />
     </View>
   );
 }
@@ -13,8 +44,22 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  text: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+
+  local_image: {
+    width: 100,
+    height: 100,
+  },
+
+  url_image: {
+    width: 200,
+    height: 200,
   },
 });
