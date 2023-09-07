@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import UseEffectWithClassComponet from "./screen/useEffect/UseEffectWithClassComponet";
 import UseEffectWithFunctionalComponent from "./screen/useEffect/UseEffectWithFunctionalComponent";
+import CustomHook from "./hooks/CustomHook";
 // import StateWitheClassComponent from "./screen/StateWitheClassComponent";
 // import StateWitheFunctionComponent from "./screen/StateWitheFunctionComponent";
 
@@ -29,14 +30,15 @@ export default function App() {
           setIsTrue(!isTure);
         }}
       /> */}
-      <UseEffectWithFunctionalComponent />
+      {/* <UseEffectWithFunctionalComponent />
 
       <Button
         title="toggle"
         onPress={() => {
           setIsTrue(!isTure);
         }}
-      />
+      /> */}
+      <CustomHook />
     </View>
   );
 }
