@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
+  Alert,
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   Text,
   TouchableOpacity,
   View,
@@ -61,7 +63,7 @@ const ArrowButton = ({ iconName, onPress }) => {
 
 export default function TodoList() {
   const now = dayjs();
-
+  const flatListRef = useRef(null);
   const {
     selectedDate,
     setSelectedDate,
@@ -74,13 +76,16 @@ export default function TodoList() {
   } = useCalender(now);
 
   const {
+    filterredTodoList,
     myTodoList,
     myTodoInput,
     setMyTodoInput,
     addMyTodo,
     removeTodo,
     toggleTodo,
+    resetInput,
   } = useTodoList(selectedDate);
+  console.log(selectedDate, "selectedDate");
 
   // const [selectedDate, setSelectedDate] = useState(now);
   // const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -168,9 +173,23 @@ export default function TodoList() {
 
   const renderItem = ({ item: todo }) => {
     const isSuccess = todo.isSuccess;
-
+    const onPress = () => toggleTodo(todo.id);
+    const onLongPress = () => {
+      Alert.alert("삭제하시겠어요?", "메시지", [
+        {
+          style: "cancel",
+          text: "아니요",
+        },
+        {
+          text: "네",
+          onPress: () => removeTodo(todo.id),
+        },
+      ]);
+    };
     return (
-      <View
+      <Pressable
+        onPress={onPress}
+        onLongPress={onLongPress}
         style={{
           width: ITEM_WIDTH,
           alignSelf: "center",
@@ -188,11 +207,31 @@ export default function TodoList() {
           size={17}
           color={isSuccess ? "#595959" : "#bfbfbf"}
         />
-      </View>
+      </Pressable>
     );
   };
 
-  const onPressAdd = () => {};
+  const scrollToEnd = () => {
+    setTimeout(() => {
+      flatListRef?.current.scrollToEnd();
+    }, 200);
+  };
+
+  const onPressAdd = () => {
+    addMyTodo();
+    resetInput();
+    scrollToEnd();
+  };
+
+  const onSubmitEditing = () => {
+    addMyTodo();
+    resetInput();
+    scrollToEnd();
+  };
+
+  const onFocus = () => {
+    scrollToEnd();
+  };
 
   useEffect(() => {
     runPracticeDayjs();
@@ -211,43 +250,51 @@ export default function TodoList() {
     <View>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}>
-        <FlatList
-          data={myTodoList}
-          contentContainerStyle={{ paddingTop: statusBarHeight }}
-          ListHeaderComponent={
-            <View>
-              <Calender
-                columns={columns}
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
-                onPressDate={onPressDate}
-                onPressLeftArrow={onPressLeftArrow}
-                onPressRightArrow={onPressRightArrow}
-                onPressHeaderDate={onPressHeaderDate}
-              />
-              <Margin height={16} />
-              <View
-                style={{
-                  width: 4,
-                  height: 4,
-                  borderRadius: 20 / 2,
-                  backgroundColor: "#a3a3a3",
-                  // alignItems: "center",
-                  // justifyContent: "center",
-                  alignSelf: "center",
-                }}
-              />
-              <Margin height={16} />
-            </View>
-          }
-          renderItem={renderItem}
-        />
-        <AddTodoInput
-          value={myTodoInput}
-          onChangeText={setMyTodoInput}
-          placeholder={`${dayjs(selectedDate).format("MM.D")}에 추가할 투두`}
-          onPressAdd={onPressAdd}
-        />
+        <View>
+          <FlatList
+            ref={flatListRef}
+            data={filterredTodoList}
+            contentContainerStyle={{ paddingTop: statusBarHeight + 30 }}
+            ListHeaderComponent={
+              <View>
+                <Calender
+                  myTodoList={myTodoList}
+                  filterredTodoList={filterredTodoList}
+                  columns={columns}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                  onPressDate={onPressDate}
+                  onPressLeftArrow={onPressLeftArrow}
+                  onPressRightArrow={onPressRightArrow}
+                  onPressHeaderDate={onPressHeaderDate}
+                />
+                <Margin height={16} />
+                <View
+                  style={{
+                    width: 4,
+                    height: 4,
+                    borderRadius: 20 / 2,
+                    backgroundColor: "#a3a3a3",
+                    // alignItems: "center",
+                    // justifyContent: "center",
+                    alignSelf: "center",
+                  }}
+                />
+                <Margin height={16} />
+              </View>
+            }
+            renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
+          />
+          <AddTodoInput
+            value={myTodoInput}
+            onChangeText={setMyTodoInput}
+            placeholder={`${dayjs(selectedDate).format("MM.D")}에 추가할 투두`}
+            onPressAdd={onPressAdd}
+            onSubmitEditing={onSubmitEditing}
+            onFocus={onFocus}
+          />
+        </View>
       </KeyboardAvoidingView>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}

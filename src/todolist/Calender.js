@@ -3,9 +3,12 @@ import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { getDayColor, getDayText } from "./utils";
 import dayjs from "dayjs";
 import { SimpleLineIcons } from "@expo/vector-icons";
+import TodoList from "./TodoList";
 
 export default function Calender({
   columns,
+  myTodoList,
+  filterredTodoList,
   statusBarHeight,
   selectedDate,
   setSelectedDate,
@@ -60,6 +63,7 @@ export default function Calender({
                 opacity={1}
                 key={`day-${day}`}
                 disabled={true}
+                filterredTodoList={filterredTodoList}
               />
             );
           })}
@@ -68,7 +72,15 @@ export default function Calender({
     );
   };
 
-  const Column = ({ text, color, opacity, disabled, onPress, isSelected }) => {
+  const Column = ({
+    text,
+    color,
+    opacity,
+    disabled,
+    onPress,
+    isSelected,
+    hasTodo,
+  }) => {
     return (
       <TouchableOpacity
         disabled={disabled}
@@ -81,7 +93,10 @@ export default function Calender({
           backgroundColor: isSelected ? "#c2c2c2" : "transparent",
           borderRadius: columnSize / 2,
         }}>
-        <Text style={{ color, opacity }}>{text}</Text>
+        <Text
+          style={{ color, opacity, fontWeight: hasTodo ? "bold" : "normal" }}>
+          {text}
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -95,6 +110,10 @@ export default function Calender({
     const onPress = () => onPressDate(date);
     const isSelected = dayjs(date).isSame(selectedDate, "date");
 
+    const hasTodo = myTodoList.find((todo) =>
+      dayjs(todo.date).isSame(dayjs(date), "date")
+    );
+
     return (
       <Column
         text={dateText}
@@ -103,6 +122,7 @@ export default function Calender({
         opacity={isCurrentMonth ? 1 : 0.4}
         onPress={onPress}
         isSelected={isSelected}
+        hasTodo={hasTodo}
       />
     );
   };
