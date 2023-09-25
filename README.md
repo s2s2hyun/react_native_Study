@@ -1,5 +1,3 @@
-
-
 <p align="center">
    <a aria-label="SDK version" href="https://www.npmjs.com/package/expo" target="_blank">
     <img alt="Expo SDK version" src="https://img.shields.io/npm/v/expo.svg?style=flat-square&label=SDK&labelColor=000000&color=4630EB" />
@@ -100,9 +98,32 @@ If you still have questions you can ask them on our [forums](https://forums.expo
 
 Curious about who makes Expo? Here are our [team members](https://expo.dev/about)!
 
-## License
+## Part3 mygallery package.json change
 
-The Expo source code is made available under the [MIT license](LICENSE). Some of the dependencies are licensed differently, with the BSD license, for example.
-
+{
+"name": "my-gallery",
+"version": "1.0.0",
+"main": "node_modules/expo/AppEntry.js",
+"scripts": {
+"start": "expo start",
+"android": "expo start --android",
+"ios": "expo start --ios",
+"web": "expo start --web"
+},
+"dependencies": {
+"@react-native-async-storage/async-storage": "~1.17.3",
+"expo": "^45.0.0",
+"expo-ads-admob": "~13.0.0",
+"expo-image-picker": "~13.1.1",
+"expo-status-bar": "~1.3.0",
+"react": "17.0.2",
+"react-native": "0.68.2",
+"styled-components": "^5.3.6"
+},
+"devDependencies": {
+"@babel/core": "^7.12.9"
+},
+"private": true
+}
 
 <img alt="Star the Expo repo on GitHub to support the project" src="https://user-images.githubusercontent.com/9664363/185428788-d762fd5d-97b3-4f59-8db7-f72405be9677.gif" width="50%">
