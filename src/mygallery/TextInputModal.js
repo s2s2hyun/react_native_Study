@@ -28,10 +28,9 @@ export default function TextInputModal({
   }, [modalVisible]);
 
   return (
-    <Modal animationType="fade" transparent={true} visible={modalVisible}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      <Modal animationType="fade" transparent={true} visible={modalVisible}>
         <Pressable onPress={onPressBackdrop} style={{ flex: 1 }}>
           <SafeAreaView
             style={{
@@ -47,6 +46,7 @@ export default function TextInputModal({
                 padding: 10,
                 borderWidth: 0.5,
                 borderColor: "lightgrey",
+                backgroundColor: "#fff",
               }}
               value={albumTitle}
               onChangeText={setAlbumTitle}
@@ -55,7 +55,7 @@ export default function TextInputModal({
             />
           </SafeAreaView>
         </Pressable>
-      </KeyboardAvoidingView>
-    </Modal>
+      </Modal>
+    </KeyboardAvoidingView>
   );
 }

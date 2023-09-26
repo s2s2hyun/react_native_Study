@@ -1,25 +1,17 @@
-import { StatusBar } from "expo-status-bar";
-import dayjs from "dayjs";
 import {
   Alert,
-  Button,
   Dimensions,
-  FlatList,
-  Image,
-  Keyboard,
   Platform,
-  Pressable,
   SafeAreaView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
 } from "react-native";
 import { getStatusBarHeight } from "react-native-iphone-x-helper";
 
 import useGallery from "./src/mygallery/gallery-hook/use-gallery";
-import MyDropDownPicker from "./src/mygallery/gallery-hook/MyDropDownPicker";
+import MyDropDownPicker from "./src/mygallery/MyDropDownPicker";
 import TextInputModal from "./src/mygallery/TextInputModal";
+import BigImgModal from "./src/mygallery/BigImgModal";
+import ImageList from "./src/mygallery/ImageList";
 
 const statusBarHeight = getStatusBarHeight(true);
 
@@ -33,18 +25,28 @@ export default function App() {
     deleteImage,
     imagesWidthAddButton,
     selectedAlbum,
-    modalVisible,
-    openModal,
+    textInputModalVisible,
+    openTextInputModal,
+    closeTextInputModal,
     albumTitle,
     setAlbumTitle,
     addAlbum,
     resetAlbumTitle,
-    closeModal,
     openDropDown,
     closeDropDown,
     isDropDownOpen,
     albums,
     selectAlbum,
+    deleteAlbum,
+    picModalVisible,
+    openPictureModal,
+    closePictureModal,
+    selectedImage,
+    selectImage,
+    moveToPreviousImage,
+    moveToNextImage,
+    showPreviousArrow,
+    showNextArrow,
   } = useGallery();
 
   const onPressOpenGallery = () => {
@@ -54,8 +56,25 @@ export default function App() {
     deleteImage(imageId);
   };
 
+  const onPressWatchAd = () => {
+    console.log("load ad");
+  };
+
   const onPressAddAlbum = () => {
-    openModal();
+    if (albums.length >= 2) {
+      Alert.alert("광고를 시청해야 앨범을 추가할 수 있습니다.", "", [
+        {
+          style: "cancel",
+          text: "닫기",
+        },
+        {
+          text: "광고 시청",
+          onPress: onPressWatchAd,
+        },
+      ]);
+    } else {
+      openTextInputModal();
+    }
   };
 
   const onSubmitEditing = () => {
@@ -67,12 +86,12 @@ export default function App() {
     addAlbum();
 
     // 2. 모달 닫기 , 입력 input 초기화
-    closeModal();
+    closeTextInputModal();
     resetAlbumTitle();
   };
 
-  const onPressBackdrop = () => {
-    closeModal();
+  const onPressTextInputBackdrop = () => {
+    closeTextInputModal();
   };
 
   const onPressHeader = () => {
@@ -88,32 +107,25 @@ export default function App() {
     closeDropDown();
   };
 
-  const renderItem = ({ item: { id, uri }, index }) => {
-    if (id === -1) {
-      return (
-        <TouchableOpacity
-          onPress={onPressOpenGallery}
-          style={{
-            width: columnSize,
-            height: columnSize,
-            backgroundColor: "lightgrey",
-            justifyContent: "center",
-            alignItems: "center",
-          }}>
-          <Text style={{ fontWeight: "100", fontSize: 45 }}>+</Text>
-        </TouchableOpacity>
-      );
-    }
+  const onLongPressAlbum = (albumId) => {
+    deleteAlbum(albumId);
+  };
 
-    return (
-      <TouchableOpacity onLongPress={() => onLongPressImages(id)}>
-        <Image
-          key={index}
-          source={{ uri }}
-          style={{ width: columnSize, height: columnSize }}
-        />
-      </TouchableOpacity>
-    );
+  const onPressImage = (image) => {
+    // TODO : Image
+    selectImage(image);
+    openPictureModal();
+  };
+
+  const onPressPictureBackdrop = () => {
+    closePictureModal();
+  };
+
+  const onPressLeftArrow = () => {
+    moveToPreviousImage();
+  };
+  const onPressRightArrow = () => {
+    moveToNextImage();
   };
 
   return (
@@ -127,22 +139,34 @@ export default function App() {
         albums={albums}
         onPressAlbum={onPressAlbum}
         selectedAlbum={selectedAlbum}
+        onLongPressAlbum={onLongPressAlbum}
       />
 
       {/* 앨범을 추가하는 TextInputModal */}
       <TextInputModal
-        modalVisible={modalVisible}
+        modalVisible={textInputModalVisible}
         albumTitle={albumTitle}
         setAlbumTitle={setAlbumTitle}
         onSubmitEditing={onSubmitEditing}
-        onPressBackdrop={onPressBackdrop}
+        onPressBackdrop={onPressTextInputBackdrop}
       />
+      {/* 이미지 크게 보는 BigImgModal */}
+      <BigImgModal
+        modalVisible={picModalVisible}
+        onPressBackdrop={onPressPictureBackdrop}
+        selectedImage={selectedImage}
+        onPressLeftArrow={onPressLeftArrow}
+        onPressRightArrow={onPressRightArrow}
+        showPreviousArrow={showPreviousArrow}
+        showNextArrow={showNextArrow}
+      />
+
       {/* 이미지 리스트 */}
-      <FlatList
-        data={imagesWidthAddButton}
-        renderItem={renderItem}
-        numColumns={3}
-        style={{ zIndex: -1 }}
+      <ImageList
+        imagesWidthAddButton={imagesWidthAddButton}
+        onLongPressImages={onLongPressImages}
+        onPressOpenGallery={onPressOpenGallery}
+        onPressImage={onPressImage}
       />
     </SafeAreaView>
   );

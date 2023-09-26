@@ -12,7 +12,9 @@ export default function MyDropDownPicker({
   onPressHeader,
   albums,
   onPressAlbum,
+  onLongPressAlbum,
 }) {
+  console.log();
   return (
     <View>
       <TouchableOpacity
@@ -27,7 +29,7 @@ export default function MyDropDownPicker({
         onPress={onPressHeader}>
         <Text style={{ fontWeight: "bold" }}>{selectedAlbumTitle} </Text>
         <SimpleLineIcons
-          name={isDropDownOpen ? "arrow-down" : "arrow-up"}
+          name={isDropDownOpen ? "arrow-up" : "arrow-down"}
           size={12}
           color="black"
           style={{ marginLeft: 8 }}
@@ -58,9 +60,12 @@ export default function MyDropDownPicker({
           }}>
           {albums.map((album, index) => {
             const isSelectedAlbum = album.id === selectedAlbum.id;
+
+            console.log(album.id, "albumId");
             return (
               <TouchableOpacity
                 key={`albums-${index}`}
+                activeOpacity={1}
                 style={{
                   paddingVertical: 10,
                   width: "100%",
@@ -68,7 +73,8 @@ export default function MyDropDownPicker({
                   alignItems: "center",
                   backgroundColor: "#FFF",
                 }}
-                onPress={() => onPressAlbum(album)}>
+                onPress={() => onPressAlbum(album)}
+                onLongPress={() => onLongPressAlbum(album.id)}>
                 <Text
                   style={{ fontWeight: isSelectedAlbum ? "bold" : undefined }}>
                   {album.title}
