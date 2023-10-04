@@ -174,7 +174,7 @@ export default function App() {
     </View>
   );
 
-  const ListFoonterComponent = () => {
+  const ListFooterComponent = () => {
     <Margin height={30} />;
   };
 
@@ -239,7 +239,7 @@ export default function App() {
         renderSectionHeader={renderSectionHeader}
         renderItem={renderItem}
         ItemSeparatorComponent={ItemSeparatorComponent}
-        ListFoonterComponent={ListFoonterComponent}
+        ListFooterComponent={ListFooterComponent}
         refreshControl={
           <RefreshControl
             //refresh control used for the Pull to Refresh
