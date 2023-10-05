@@ -1,44 +1,76 @@
 import * as React from "react";
-import { View, Text } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { ScreenA } from "./src/reactnavigation/ScreenA";
-import { ScreenB } from "./src/reactnavigation/ScreenB";
-import { ScreenC } from "./src/reactnavigation/ScreenC";
-import { NestedStackNavigation } from "./src/reactnavigation/NestedStackNavigator";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { TabA } from "./src/reactnavigation/TabScreen/TabA";
-import { TabB } from "./src/reactnavigation/TabScreen/TabB";
-import { Ionicons } from "@expo/vector-icons";
-import { BottomTabNavigation } from "./src/reactnavigation/BottomTabNavigator";
-const Stack = createNativeStackNavigator();
-const BottomTab = createBottomTabNavigator();
+import { View, Text, StyleSheet } from "react-native";
+import { Typography } from "./src/commonComponents/Typography";
+import { LocalImage } from "./src/commonComponents/LocalImage";
+import { RemoteImage } from "./src/commonComponents/RemoteImage";
+import { Icon } from "./src/commonComponents/Icons";
+import { Badge } from "./src/commonComponents/Badge";
+import { Button } from "./src/commonComponents/Button";
+import { Divider } from "./src/commonComponents/Divider";
+import { Spacer } from "./src/commonComponents/Spacer";
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name={"NestedBottomTab"}
-          component={BottomTabNavigation}
-        />
-        <Stack.Screen name="ScreenB" component={ScreenB} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={styles.container}>
+      <Typography color="red" fontSize={20}>
+        이것은
+        <Typography color="green" fontSize={20}>
+          텍스트
+        </Typography>
+        입니다.
+      </Typography>
+      <Divider />
+      <LocalImage
+        localAssets={require("./assets/favicon.png")}
+        width={50}
+        height={50}
+      />
+      <Spacer space={20} />
+      <Divider />
+      <RemoteImage
+        url={"https://i3.ytimg.com/vi/608r8etX_cg/maxresdefault.jpg"}
+        width={200}
+        height={100}
+      />
+      <Icon name="home" size={40} color="red" />
+      <Spacer space={20} />
+      <View style={{ flexDirection: "row" }}>
+        <Badge fontSize={10}>
+          <Typography fontSize={10}>Badge</Typography>
+        </Badge>
+        <Spacer space={20} />
+        <Badge fontSize={10}>
+          <Icon name="home" size={50} />
+        </Badge>
+      </View>
+      <Divider />
+      <Spacer space={20} />
+      <View style={{ flexDirection: "row", marginTop: 32 }}>
+        <Button
+          onPress={() => {
+            console.log("Press Button");
+          }}>
+          <Typography fontSize={20} color="blue">
+            Text Button
+          </Typography>
+        </Button>
+        <Spacer space={20} />
+        <Button
+          onPress={() => {
+            console.log("Press icon Button");
+          }}>
+          <Icon name="home" size={50} color="green" />
+        </Button>
+      </View>
+    </View>
   );
 }
 
-// export default function App() {
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator
-//         screenOptions={{
-//           animation: "slide_from_right", // 우측에서 나오는 애니메이션
-//         }}>
-//         <Stack.Screen name="ScreenA" component={ScreenA} />
-//         <Stack.Screen name="ScreenB" component={ScreenB} />
-//         <Stack.Screen name="Nested" component={NestedStackNavigation} />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
