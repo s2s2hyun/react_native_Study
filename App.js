@@ -9,13 +9,24 @@ import { Button } from "./src/commonComponents/Button";
 import { Divider } from "./src/commonComponents/Divider";
 import { Spacer } from "./src/commonComponents/Spacer";
 import { TabIcon } from "./src/commonComponents/TabIcon";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { HeaderWithoutComponent } from "./src/reactnavigation/HeaderWithoutComponent";
+import { Header } from "./src/reactnavigation/Header/Header";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <TabIcon iconName="home"></TabIcon>
-      <TabIcon iconName="home" visibleBadge></TabIcon>
-    </View>
+    <SafeAreaProvider>
+      <View style={styles.container}>
+        {/* <HeaderWithoutComponent title="HEADER" /> */}
+        <Header>
+          <Header.Group>
+            <Header.Icon iconName="arrow-back"></Header.Icon>
+            <Header.Title title="HEADER"></Header.Title>
+          </Header.Group>
+          <Header.Icon iconName="close"></Header.Icon>
+        </Header>
+      </View>
+    </SafeAreaProvider>
   );
 }
 
@@ -23,7 +34,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
   },
 });
