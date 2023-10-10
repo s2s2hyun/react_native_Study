@@ -14,6 +14,9 @@ import { HeaderWithoutComponent } from "./src/reactnavigation/HeaderWithoutCompo
 import { Header } from "./src/reactnavigation/Header/Header";
 import { HookTestComponent } from "./src/commonComponents/useHook/HookTestComponent";
 import { useState, useCallback } from "react";
+import { CounterScreen } from "./src/commonComponents/redux/screens/CounterScreen";
+import { Provider } from "react-redux";
+import store from "./src/commonComponents/redux/store/store";
 
 export default function App() {
   const [a, setA] = useState(0);
@@ -25,24 +28,9 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <View style={styles.container}>
-        <Header>
-          <Header.Title title="HEADER"></Header.Title>
-        </Header>
-        <View
-          style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
-          <HookTestComponent a={a} b={b} />
-
-          <Typography>현재 useCallback 값은 : {doSum()}</Typography>
-
-          <Button
-            onPress={() => {
-              console.log("press"), setA(a + 1);
-            }}>
-            <Typography>A 더하기 </Typography>
-          </Button>
-        </View>
-      </View>
+      <Provider store={store}>
+        <CounterScreen />
+      </Provider>
     </SafeAreaProvider>
   );
 }
